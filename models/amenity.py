@@ -9,10 +9,9 @@ from sqlalchemy.orm import relationship
 
 
 class Amenity(BaseModel, Base):
-    """Representation of Amenity"""
-
-    if models.storage_t == "db":
-        __tablename__ = "amenities"
+    """Representation of Amenity """
+    if models.storage_t == 'db':
+        __tablename__ = 'amenities'
         name = Column(String(128), nullable=False)
     else:
         name = ""
