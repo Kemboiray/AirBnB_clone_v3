@@ -23,8 +23,9 @@ def object_count():
     """Retrieve object count"""
     classes = {"amenities": Amenity, "cities": City, "places": Place,
                "reviews": Review, "states": State, "users": User}
-#   obj_count = {}
-#   for k, v in classes.items():
-#       count = storage.count(v)
-#       obj_count[k] = count
-    return jsonify({k, storage.count(v) for k, v in classes.items()})
+
+    obj_count = {}
+    for k, v in classes.items():
+        count = storage.count(v)
+        obj_count[k] = count
+    return jsonify(obj_count)
