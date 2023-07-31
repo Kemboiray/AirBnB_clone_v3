@@ -74,7 +74,8 @@ def create_place(city_id):
     if city:
         if not data:
             abort(400, description="Not a JSON")
-        user = [u for u in storage.all(User).values() if u.id == user_id]
+        user = [u for u in storage.all(User).values()
+                if u.id == data['user_id']]
         if not user:
             abort(404)
         if "user_id" not in data:
