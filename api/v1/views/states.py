@@ -2,7 +2,7 @@
 """Defines a view for `State` objects"""
 
 from api.v1.views import app_views
-from flask import jsonify, abort
+from flask import jsonify, abort, request
 from models.state import State
 from models import storage
 
@@ -37,6 +37,37 @@ def delete_state(state_id):
         storage.delete(state[0])
         return jsonify({}), 200
     abort(404)
+
+
+@app_views.route('/states/<state_id>', strict_slashes=False,
+                 methods=['PUT'])
+def update_state(state_id):
+    """Update a `State` object, given its `id`"""
+    state = [v for v in storage.all(State).values() if v.id == state_id]
+    if state:
+        data = request.get_json()
+        if not data:
+            abort(400, description="Not a JSON")
+        for key in data.keys():
+            if key in ("id", "created_at", "uppdated_at"):
+                del data[key]
+        state[0].__dict__.update(data)
+        state[0].save()
+        return jsonify(state[0].to_dict()), 200
+    abort(404)
+
+
+@app_views.route('/states', strict_slashes=False, methods=['POST'])
+def create_state():
+    """Create a `State` object"""
+    data = request.get_json()
+    if not data:
+        abort(400, description="Not a JSON")
+    if "name" not in data:
+        abort(400, description="Missing name")
+    state_obj = State(**data)
+    state_obj.save()
+    return jsonify(state_obj.to_dict()), 201
 
 
 @app_views.errorhandler(404)
