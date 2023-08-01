@@ -14,8 +14,8 @@ from models import storage
 def get_places(city_id):
     """Retrieve the list of `Place` objects"""
     city = [c for c in storage.all(City).values() if c.id == city_id]
+    place = []
     if city:
-        place = []
         for p in storage.all(Place).values():
             if p.city_id == city_id:
                 place.append(p.to_dict())
